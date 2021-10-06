@@ -6,9 +6,9 @@ from rdkit import RDLogger
 from utils.args import get_GAN_config
 from utils.utils_io import get_date_postfix
 
-# Remove flooding logs.
-#lg = RDLogger.logger()
-#lg.setLevel(RDLogger.CRITICAL)
+# Remove flooding logs
+lg = RDLogger.logger()
+lg.setLevel(RDLogger.CRITICAL)
 
 from solver import Solver
 from torch.backends import cudnn
@@ -48,11 +48,13 @@ def main(config):
     # Logger
     if config.mode == 'train':
         log_p_name = os.path.join(config.log_dir_path, a_train_time + '_logger.log')
+        from imp import reload
+        reload(logging)
         logging.basicConfig(filename=log_p_name, level=logging.INFO)
         logging.info(config)
 
 
-    exit()
+    import IPython; IPython.embed(); exit(1)
 
     # Solver for training and test MolGAN
     if config.mode == 'train':
@@ -76,7 +78,7 @@ if __name__ == '__main__':
     #config.mol_data_dir = r'data/qm9_5k.sparsedataset'
 
     # Quantum
-    config.quantum = True
+    config.quantum = False
     config.complexity = 'nr'
     config.batch_size = 128
 
@@ -128,7 +130,8 @@ if __name__ == '__main__':
                 qml.CNOT(wires=[i, i+1])
         return [qml.expval(qml.PauliZ(i)) for i in range(config.qubits)]
 
-    config.gen_circuit = gen_circuit
+    if config.quantum:
+        config.gen_circuit = gen_circuit
 
     print(config)
 
