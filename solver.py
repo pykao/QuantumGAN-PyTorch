@@ -271,7 +271,7 @@ class Solver(object):
         if self.quantum:
             with open(os.path.join(self.model_dir_path, 'molgan_red_weights.csv'), 'a') as file:
                 writer = csv.writer(file)
-                writer.writerow(list(self.gen_weights.detach().numpy()))
+                writer.writerow([str(epoch_i)]+list(self.gen_weights.detach().numpy()))
         print('Saved model checkpoints into {}...'.format(self.model_dir_path))
         if self.log is not None:
             self.log.info('Saved model checkpoints into {}...'.format(self.model_dir_path))
