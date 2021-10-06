@@ -53,9 +53,6 @@ def main(config):
         logging.basicConfig(filename=log_p_name, level=logging.INFO)
         logging.info(config)
 
-
-    import IPython; IPython.embed(); exit(1)
-
     # Solver for training and test MolGAN
     if config.mode == 'train':
         solver = Solver(config, logging)
