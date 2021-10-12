@@ -68,7 +68,7 @@ if __name__ == '__main__':
     config = get_GAN_config()
 
     # GPU
-    os.environ["CUDA_VISIBLE_DEVICES"]="6"
+    os.environ["CUDA_VISIBLE_DEVICES"]="0"
 
     # molecule dataset dir
     config.mol_data_dir = r'data/gdb9_9nodes.sparsedataset'
@@ -76,11 +76,11 @@ if __name__ == '__main__':
 
     # Quantum
     config.quantum = False
-    config.complexity = 'nr'
-    config.batch_size = 128
+    config.complexity = 'mr'
+    config.batch_size = 32
 
     # Training
-    config.z_dim = 8
+    config.z_dim = 32
     config.num_epochs = 30
     # 1.0 for pure WGAN and 0.0 for pure RL
     config.lambda_wgan = 1.0
@@ -127,8 +127,7 @@ if __name__ == '__main__':
                 qml.CNOT(wires=[i, i+1])
         return [qml.expval(qml.PauliZ(i)) for i in range(config.qubits)]
 
-    if config.quantum:
-        config.gen_circuit = gen_circuit
+    config.gen_circuit = gen_circuit
 
     print(config)
 
