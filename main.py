@@ -111,7 +111,7 @@ if __name__ == '__main__':
     else:
         raise ValueError("Please enter an valid model complexity from 'mr', 'hr' or 'nr'!")
 
-    if config.quantum:
+    if config.quantum and config.mode == 'train':
         config.saving_dir = 'results/quantum-GAN'
 
     dev = qml.device('default.qubit', wires=config.qubits)
