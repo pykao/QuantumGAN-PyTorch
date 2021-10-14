@@ -153,6 +153,12 @@ class Solver(object):
         self.D.load_state_dict(torch.load(D_path, map_location=lambda storage, loc: storage))
         self.V.load_state_dict(torch.load(V_path, map_location=lambda storage, loc: storage))
 
+    def load_gen_weights(self, resume_iters):
+        weights_pth = os.path.join(self.model_dir_path, 'molgan_red_weights.csv')
+        import pandas as pd
+        weights = pd.read_csv(weights_pth, header=None).iloc[resume_iters-1, 1:].values
+        self.gen_weights = torch.tensor(list(weights), requires_grad=True)
+
     def reset_grad(self):
         """Reset the gradient buffers"""
         self.g_optimizer.zero_grad()
@@ -231,6 +237,8 @@ class Solver(object):
             self.restore_model(self.resume_epoch)
         elif self.test_epoch is not None and self.mode == 'test':
             self.restore_model(self.test_epoch)
+            if self.quantum:
+                self.load_gen_weights(self.test_epoch)
         else:
             print('Training From Scratch...')
 
