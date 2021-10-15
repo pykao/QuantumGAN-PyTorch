@@ -75,8 +75,8 @@ if __name__ == '__main__':
     #config.mol_data_dir = r'data/qm9_5k.sparsedataset'
 
     # Quantum
-    config.quantum = False
-    #config.qubits = 8
+    config.quantum = True
+    config.qubits = 8
 
 
     # Training
@@ -89,14 +89,14 @@ if __name__ == '__main__':
 
     # Test
     config.mode = "test"
-    config.test_epoch = 30
+    config.test_epoch = 1
     config.test_sample_size = 5000
-    config.z_dim = 32
-    config.complexity = 'hr'
+    config.z_dim = 8
+    config.complexity = 'mr'
     # MolGAN
-    config.saving_dir = r"results/GAN/20211014_103213/train"
+    #config.saving_dir = r"results/GAN/20211014_103213/train"
     # Quantum
-    #config.saving_dir = r"results/quantum-GAN/20211006_120135/train"
+    config.saving_dir = r"results/quantum-GAN/20211006_120026/train"
 
 
 
