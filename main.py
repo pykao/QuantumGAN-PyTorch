@@ -52,6 +52,14 @@ def main(config):
         reload(logging)
         logging.basicConfig(filename=log_p_name, level=logging.INFO)
         logging.info(config)
+    elif config.mode == 'test':
+        log_p_name = os.path.join(config.log_dir_path, a_test_time + '_logger.log')
+        from imp import reload
+        reload(logging)
+        logging.basicConfig(filename=log_p_name, level=logging.INFO)
+        logging.info(config)
+    else:
+        raise NotImplementedError
 
     # Solver for training and test MolGAN
     if config.mode == 'train':
