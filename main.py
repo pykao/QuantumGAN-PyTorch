@@ -65,7 +65,7 @@ def main(config):
     if config.mode == 'train':
         solver = Solver(config, logging)
     elif config.mode == 'test':
-        solver = Solver(config)
+        solver = Solver(config, logging)
     else:
         raise NotImplementedError
 
