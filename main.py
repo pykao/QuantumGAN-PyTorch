@@ -76,7 +76,7 @@ if __name__ == '__main__':
     config = get_GAN_config()
 
     # GPU
-    os.environ["CUDA_VISIBLE_DEVICES"]="0"
+    os.environ["CUDA_VISIBLE_DEVICES"]="2"
 
     # molecule dataset dir
     config.mol_data_dir = r'data/gdb9_9nodes.sparsedataset'
@@ -88,23 +88,24 @@ if __name__ == '__main__':
 
 
     # Training
-    #config.complexity = 'hr'
-    #config.batch_size = 128
-    #config.z_dim = 8
-    #config.num_epochs = 60
+    config.complexity = 'mr'
+    config.batch_size = 128
+    config.z_dim = 8
+    config.num_epochs = 30
+    config.n_critic = 3
     # 1.0 for pure WGAN and 0.0 for pure RL
-    #config.lambda_wgan = 1
+    config.lambda_wgan = 1
 
     # Test
-    config.mode = "test"
-    config.test_epoch = 1
-    config.test_sample_size = 5000
-    config.z_dim = 8
-    config.complexity = 'mr'
+    #config.mode = "test"
+    #config.test_epoch = 1
+    #config.test_sample_size = 5000
+    #config.z_dim = 8
+    #config.complexity = 'mr'
     # MolGAN
     #config.saving_dir = r"results/GAN/20211014_103213/train"
     # Quantum
-    config.saving_dir = r"results/quantum-GAN/20211006_120026/train"
+    #config.saving_dir = r"results/quantum-GAN/20211006_120026/train"
 
 
 
