@@ -235,6 +235,8 @@ class Solver(object):
         if self.resume_epoch is not None and self.mode == 'train':
             start_epoch = self.resume_epoch
             self.restore_model(self.resume_epoch)
+            if self.quantum:
+                self.load_gen_weights(self.resume_epoch)
         elif self.test_epoch is not None and self.mode == 'test':
             self.restore_model(self.test_epoch)
             if self.quantum:
