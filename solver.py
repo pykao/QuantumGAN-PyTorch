@@ -35,6 +35,7 @@ class Solver(object):
         self.layer = config.layer
         self.qubits = config.qubits
         self.gen_circuit = config.gen_circuit
+        self.qc_lr = config.qc_lr
 
         # Model configurations
         self.z_dim = config.z_dim
@@ -95,7 +96,13 @@ class Solver(object):
         # Quantum
         if config.quantum:
             self.gen_weights = torch.tensor(list(np.random.rand(config.layer*(config.qubits*2-1))*2*np.pi-np.pi), requires_grad=True)
-            self.g_optimizer = torch.optim.Adam(list(self.G.parameters())+[self.gen_weights], self.g_lr)
+            if qc_lr:
+                self.g_optimizer = torch.optim.Adam([
+                    {'params':list(self.G.parameters())},
+                    {'params': [self.gen_weights], 'lr': self.qc_lr}
+                ], lr=self.g_lr)
+            else:
+                self.g_optimizer = torch.optim.Adam(list(self.G.parameters())+[self.gen_weights], self.g_lr)
 
     def build_model(self):
         """Create a generator and a discriminator"""
