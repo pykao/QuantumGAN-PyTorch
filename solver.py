@@ -96,7 +96,7 @@ class Solver(object):
         # Quantum
         if config.quantum:
             self.gen_weights = torch.tensor(list(np.random.rand(config.layer*(config.qubits*2-1))*2*np.pi-np.pi), requires_grad=True)
-            if qc_lr:
+            if self.qc_lr:
                 self.g_optimizer = torch.optim.Adam([
                     {'params':list(self.G.parameters())},
                     {'params': [self.gen_weights], 'lr': self.qc_lr}
