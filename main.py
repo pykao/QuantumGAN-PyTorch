@@ -76,7 +76,7 @@ if __name__ == '__main__':
     config = get_GAN_config()
 
     # GPU
-    os.environ["CUDA_VISIBLE_DEVICES"]="2"
+    os.environ["CUDA_VISIBLE_DEVICES"]="1"
 
     # molecule dataset dir
     config.mol_data_dir = r'data/gdb9_9nodes.sparsedataset'
