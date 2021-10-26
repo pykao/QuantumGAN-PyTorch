@@ -85,28 +85,29 @@ if __name__ == '__main__':
     # Quantum
     config.quantum = True
     config.qubits = 8
-    config.qc_lr = 0.01
+    #config.qc_lr = 0.01
 
 
     # Training
-    config.complexity = 'mr'
-    config.batch_size = 128
-    config.z_dim = 8
-    config.num_epochs = 30
-    config.n_critic = 5
+    #config.mode = 'train'
+    #config.complexity = 'mr'
+    #config.batch_size = 128
+    #config.z_dim = 8
+    #config.num_epochs = 30
+    #config.n_critic = 5
     # 1.0 for pure WGAN and 0.0 for pure RL
-    config.lambda_wgan = 1
+    #config.lambda_wgan = 1
 
     # Test
-    #config.mode = "test"
-    #config.test_epoch = 1
-    #config.test_sample_size = 5000
-    #config.z_dim = 8
-    #config.complexity = 'mr'
+    config.mode = "test"
+    config.test_epoch = 1
+    config.test_sample_size = 5000
+    config.z_dim = 8
+    config.complexity = 'mr'
     # MolGAN
     #config.saving_dir = r"results/GAN/20211014_103213/train"
     # Quantum
-    #config.saving_dir = r"results/quantum-GAN/20211006_120026/train"
+    config.saving_dir = r"results/quantum-GAN/20211019_104707/train"
 
 
 
