@@ -97,12 +97,14 @@ class Solver(object):
         if config.quantum:
             self.gen_weights = torch.tensor(list(np.random.rand(config.layer*(config.qubits*2-1))*2*np.pi-np.pi), requires_grad=True)
             if self.qc_lr:
-                self.g_optimizer = torch.optim.Adam([
+                #self.g_optimizer = torch.optim.Adam([
+                self.g_optimizer = torch.optim.RMSprop([
                     {'params':list(self.G.parameters())},
                     {'params': [self.gen_weights], 'lr': self.qc_lr}
                 ], lr=self.g_lr)
             else:
-                self.g_optimizer = torch.optim.Adam(list(self.G.parameters())+[self.gen_weights], self.g_lr)
+                self.g_optimizer = torch.optim.RMSprop(list(self.G.parameters())+[self.gen_weights], self.g_lr)
+                #self.g_optimizer = torch.optim.Adam(list(self.G.parameters())+[self.gen_weights], self.g_lr)
 
     def build_model(self):
         """Create a generator and a discriminator"""
@@ -117,13 +119,14 @@ class Solver(object):
         self.V = Discriminator(self.d_conv_dim, self.m_dim, self.b_dim - 1, self.dropout)
 
         # Optimizers
-        #self.g_optimizer = torch.optim.RMSprop(self.G.parameters(), self.g_lr)
-        #self.d_optimizer = torch.optim.RMSprop(self.D.parameters(), self.d_lr)
-        #self.v_optimizer = torch.optim.RMSprop(self.V.parameters(), self.g_lr)
+        self.g_optimizer = torch.optim.RMSprop(self.G.parameters(), self.g_lr)
+        self.d_optimizer = torch.optim.RMSprop(self.D.parameters(), self.d_lr)
+        self.v_optimizer = torch.optim.RMSprop(self.V.parameters(), self.g_lr)
 
-        self.g_optimizer = torch.optim.Adam(self.G.parameters(), self.g_lr)
-        self.d_optimizer = torch.optim.Adam(self.D.parameters(), self.d_lr)
-        self.v_optimizer = torch.optim.Adam(self.V.parameters(), self.g_lr)
+        # Optimizer
+        #self.g_optimizer = torch.optim.Adam(self.G.parameters(), self.g_lr)
+        #self.d_optimizer = torch.optim.Adam(self.D.parameters(), self.d_lr)
+        #self.v_optimizer = torch.optim.Adam(self.V.parameters(), self.g_lr)
 
 
         # Print the networks
