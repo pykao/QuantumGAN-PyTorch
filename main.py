@@ -76,7 +76,7 @@ if __name__ == '__main__':
     config = get_GAN_config()
 
     # GPU
-    os.environ["CUDA_VISIBLE_DEVICES"]="2"
+    os.environ["CUDA_VISIBLE_DEVICES"]="7"
 
     # molecule dataset dir
     config.mol_data_dir = r'data/gdb9_9nodes.sparsedataset'
@@ -85,7 +85,7 @@ if __name__ == '__main__':
     # Quantum
     config.quantum = True
     config.qubits = 8
-    config.qc_lr = 0.1
+    config.qc_lr = 0.05
 
 
     # Training
