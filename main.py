@@ -125,7 +125,7 @@ if __name__ == '__main__':
         config.saving_dir = 'results/quantum-GAN'
 
     dev = qml.device('default.qubit', wires=config.qubits)
-    @qml.qnode(dev, interface='torch')
+    @qml.qnode(dev, interface='torch', diff_method='backprop')
     def gen_circuit(w):
         # random noise as generator input
         z1 = random.uniform(-1, 1)
