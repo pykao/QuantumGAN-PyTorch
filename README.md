@@ -2,7 +2,7 @@
 
 This is the PyTorch reimplementation of [Quantum Generative Models for Small Molecule Drug Discovery](https://arxiv.org/abs/2101.03438)
 
-The trained quantum-GAN from [the original repository](https://github.com/jundeli/quantum-gan) cannot generate reasonalbe molecules.
+The trained quantum-GAN from [the original repository](https://github.com/jundeli/quantum-gan) cannot generate reasonable molecules.
 
 ## Environment
 
