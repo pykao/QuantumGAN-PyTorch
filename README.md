@@ -1,7 +1,8 @@
-# MolGAN-PyTorch
+# QuantumGAN-PyTorch
 
-This is the PyTorch Implementation of [MolGAN: An implicit generative model for small molecular graphs](https://arxiv.org/abs/1805.11973)
+This is the PyTorch reimplementation of [Quantum Generative Models for Small Molecule Drug Discovery](https://arxiv.org/abs/2101.03438)
 
+The trained quantum-GAN from [the original repository](https://github.com/jundeli/quantum-gan) cannot generate reasonalbe molecules.
 
 ## Environment
 
@@ -14,7 +15,7 @@ conda env create -f environment.yml
 You are able to activate the environment:
 
 ```bash
-conda activate molgan
+conda activate molgan-pt
 ```
 
 ## Download GDB-9 Dataset
@@ -63,4 +64,5 @@ python main.py
 ## Credits
 This repository refers to the following repositories:
  - [nicola-decao/MolGAN](https://github.com/nicola-decao/MolGAN)
- - [ ZhenyueQin/Implementation-MolGAN-PyTorch](https://github.com/ZhenyueQin/Implementation-MolGAN-PyTorch)
+ - [ZhenyueQin/Implementation-MolGAN-PyTorch](https://github.com/ZhenyueQin/Implementation-MolGAN-PyTorch)
+ - [jundeli/quantum-gan](https://github.com/jundeli/quantum-gan)
