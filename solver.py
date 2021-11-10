@@ -63,6 +63,8 @@ class Solver(object):
         else:
             self.n_critic = 1
 
+        self.critic_type = config.critic_type
+
         self.resume_epoch = config.resume_epoch
 
         # Training or test
@@ -402,13 +404,18 @@ class Solver(object):
 
             # Optimise discriminator
             if train_val_test == 'train':
-                # training D for n_critic-1 times followed by G one time
-                if (cur_step == 0) or (cur_step % self.n_critic != 0):
-                # training G for n_critic-1 times followed by D one time
-                # if (cur_step != 0) and (cur_step % self.n_critic == 0):
-                    self.reset_grad()
-                    loss_D.backward()
-                    self.d_optimizer.step()
+                if self.critic_type == 'D':
+                    # training D for n_critic-1 times followed by G one time
+                    if (cur_step == 0) or (cur_step % self.n_critic != 0):
+                        self.reset_grad()
+                        loss_D.backward()
+                        self.d_optimizer.step()
+                else:
+                    # training G for n_critic-1 times followed by D one time
+                    if (cur_step != 0) and (cur_step % self.n_critic == 0):
+                        self.reset_grad()
+                        loss_D.backward()
+                        self.d_optimizer.step()
 
             ########## Train the generator ##########
 
@@ -457,19 +464,30 @@ class Solver(object):
 
             # Optimise generator and reward network
             if train_val_test == 'train':
-                # training D for n_critic-1 times followed by G one time
-                if (cur_step != 0) and (cur_step % self.n_critic) == 0:
-                # training G for n_critic-1 times followed by D one time
-                # if (cur_step == 0) or (cur_step % self.n_critic != 0):
-                    self.reset_grad()
-                    if cur_la < 1.0:
-                        train_step_G.backward(retain_graph=True)
-                        train_step_V.backward()
-                        self.g_optimizer.step()
-                        self.v_optimizer.step()
-                    else:
-                        train_step_G.backward(retain_graph=True)
-                        self.g_optimizer.step()
+                if self.critic_type == 'D':
+                    # training D for n_critic-1 times followed by G one time
+                    if (cur_step != 0) and (cur_step % self.n_critic) == 0:
+                        self.reset_grad()
+                        if cur_la < 1.0:
+                            train_step_G.backward(retain_graph=True)
+                            train_step_V.backward()
+                            self.g_optimizer.step()
+                            self.v_optimizer.step()
+                        else:
+                            train_step_G.backward(retain_graph=True)
+                            self.g_optimizer.step()
+                else:
+                    # training G for n_critic-1 times followed by D one time
+                    if (cur_step == 0) or (cur_step % self.n_critic != 0):
+                        self.reset_grad()
+                        if cur_la < 1.0:
+                            train_step_G.backward(retain_graph=True)
+                            train_step_V.backward()
+                            self.g_optimizer.step()
+                            self.v_optimizer.step()
+                        else:
+                            train_step_G.backward(retain_graph=True)
+                            self.g_optimizer.step()
 
 
             if train_val_test == 'train' and self.use_tensorboard:
