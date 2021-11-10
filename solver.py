@@ -402,6 +402,7 @@ class Solver(object):
 
             # Optimise discriminator
             if train_val_test == 'train':
+                # training D for n_critic-1 times followed by G one time
                 if (cur_step == 0) or (cur_step % self.n_critic != 0):
                     self.reset_grad()
                     loss_D.backward()
@@ -454,6 +455,7 @@ class Solver(object):
 
             # Optimise generator and reward network
             if train_val_test == 'train':
+                # training D for n_critic-1 times followed by G one time
                 if (cur_step != 0) and (cur_step % self.n_critic) == 0:
                     self.reset_grad()
                     if cur_la < 1.0:
