@@ -401,7 +401,7 @@ class Solver(object):
                 loss_tb['D/loss'] = loss_D.item()
 
             # Optimise discriminator
-            if train_val_test == 'train' and cur_step % self.n_critic != 0 and cur_la > 0:
+            if (cur_step == 0) or (train_val_test == 'train' and cur_step % self.n_critic != 0 and cur_la > 0):
                 self.reset_grad()
                 loss_D.backward()
                 self.d_optimizer.step()
@@ -453,7 +453,7 @@ class Solver(object):
 
             # Optimise generator and reward network
             if train_val_test == 'train':
-                if cur_step % self.n_critic == 0:
+                if (cur_step != 0) and (cur_step % self.n_critic) == 0:
                     self.reset_grad()
                     if cur_la < 1.0:
                         train_step_G.backward(retain_graph=True)
