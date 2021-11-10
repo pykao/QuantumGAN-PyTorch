@@ -404,6 +404,8 @@ class Solver(object):
             if train_val_test == 'train':
                 # training D for n_critic-1 times followed by G one time
                 if (cur_step == 0) or (cur_step % self.n_critic != 0):
+                # training G for n_critic-1 times followed by D one time
+                # if (cur_step != 0) and (cur_step % self.n_critic == 0):
                     self.reset_grad()
                     loss_D.backward()
                     self.d_optimizer.step()
@@ -457,6 +459,8 @@ class Solver(object):
             if train_val_test == 'train':
                 # training D for n_critic-1 times followed by G one time
                 if (cur_step != 0) and (cur_step % self.n_critic) == 0:
+                # training G for n_critic-1 times followed by D one time
+                # if (cur_step == 0) or (cur_step % self.n_critic != 0):
                     self.reset_grad()
                     if cur_la < 1.0:
                         train_step_G.backward(retain_graph=True)
