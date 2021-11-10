@@ -401,10 +401,11 @@ class Solver(object):
                 loss_tb['D/loss'] = loss_D.item()
 
             # Optimise discriminator
-            if (cur_step == 0) or (train_val_test == 'train' and cur_step % self.n_critic != 0 and cur_la > 0):
-                self.reset_grad()
-                loss_D.backward()
-                self.d_optimizer.step()
+            if train_val_test == 'train':
+                if (cur_step == 0) or (cur_step % self.n_critic != 0):
+                    self.reset_grad()
+                    loss_D.backward()
+                    self.d_optimizer.step()
 
             ########## Train the generator ##########
 
