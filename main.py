@@ -75,8 +75,6 @@ if __name__ == '__main__':
 
     config = get_GAN_config()
 
-    import IPython; IPython.embed(); exit(1)
-
     # GPU
     os.environ["CUDA_VISIBLE_DEVICES"]="6"
 
