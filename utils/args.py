@@ -31,6 +31,8 @@ def get_GAN_config():
     parser.add_argument('--n_critic', type=int, default=5, help='number of X updates per each Y update')
     parser.add_argument('--critic_type', type=str, default='D', help='D for X=D and Y=G, G for X=G and Y=D')
     parser.add_argument('--resume_epoch', type=int, default=None, help='resume training from this step')
+    parser.add_argument('--decay_every_epoch', type=int, default=None, help='decay learning rate by gamma every # epoch')
+    parser.add_argument('--gamma', type=float, default=0.1, help='learning rate decay rate')
 
     # Test configuration
     parser.add_argument('--test_epoch', type=int, default=None, help='test model from this step')
