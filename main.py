@@ -93,13 +93,13 @@ if __name__ == '__main__':
     config.complexity = 'mr'
     config.batch_size = 128
     config.z_dim = 8
-    config.num_epochs = 180
+    config.num_epochs = 10
     config.n_critic = 3
     config.critic_type = 'D'
     # 1.0 for pure WGAN and 0.0 for pure RL
     config.lambda_wgan = 1
     # weight decay
-    config.decay_every_epoch = 100
+    config.decay_every_epoch = 1
 
     # Test
     #config.mode = "test"
