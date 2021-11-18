@@ -169,15 +169,12 @@ class Solver(object):
         weights = pd.read_csv(weights_pth, header=None).iloc[resume_iters-1, 1:].values
         self.gen_weights = torch.tensor(list(weights), requires_grad=True)
 
-    def update_lr(self, g_lr, d_lr):
+    def update_lr(self, gamma):
         """Decay learning rates of the generator and discriminator."""
         for param_group in self.d_optimizer.param_groups:
-            param_group['lr'] = d_lr
-        if self.qc_lr:
-            pass
-        else:
-            for param_group in self.g_optimizer.param_groups:
-                param_group['lr'] = g_lr
+            param_group['lr'] *= gamma
+        for param_group in self.g_optimizer.param_groups:
+            param_group['lr'] *= gamma
 
     def reset_grad(self):
         """Reset the gradient buffers"""
@@ -513,6 +510,12 @@ class Solver(object):
 
 
             ########## Miscellaneous ##########
+
+            # Decay learning rates
+            if epoch_i != 0 and self.decay_every_epoch:
+                if a_step == 0 and (epoch_i+1) % self.decay_every_epoch == 0:
+                    self.update_lr(self.gamma)
+
 
             # Get scores
             if train_val_test == 'val':
