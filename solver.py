@@ -47,35 +47,37 @@ class Solver(object):
         self.la_gp = config.lambda_gp
         self.post_method = config.post_method
 
-        # RL reward suggested by Sam
+        # RL reward suggested by medicinal chemist
         self.metric = 'sas,qed,unique'
 
         # Training configurations
         self.batch_size = config.batch_size
         self.num_epochs = config.num_epochs
+        # number of steps per epoch
         self.num_steps =  (len(self.data) // self.batch_size)
         self.g_lr = config.g_lr
         self.d_lr = config.d_lr
         self.dropout = config.dropout
+        # learning rate decay
+        self.gamma = config.gamma
+        self.decay_every_epoch = config.decay_every_epoch
 
+        # critic
         if self.la > 0:
             self.n_critic = config.n_critic
         else:
             self.n_critic = 1
-
         self.critic_type = config.critic_type
-
-        self.resume_epoch = config.resume_epoch
 
         # Training or test
         self.mode = config.mode
+        self.resume_epoch = config.resume_epoch
 
         # Testing configurations
         self.test_epoch = config.test_epoch
         self.test_sample_size = config.test_sample_size
 
         # Tensorboard
-
         self.use_tensorboard = config.use_tensorboard
         if self.mode == 'train' and config.use_tensorboard:
             self.logger = Logger(config.log_dir_path)
@@ -89,7 +91,7 @@ class Solver(object):
         self.model_dir_path = config.model_dir_path
         self.img_dir_path = config.img_dir_path
 
-        # Step size
+        # Step size to save the model
         self.model_save_step = config.model_save_step
 
         # Build the model
@@ -98,18 +100,19 @@ class Solver(object):
         # Quantum
         if config.quantum:
             self.gen_weights = torch.tensor(list(np.random.rand(config.layer*(config.qubits*2-1))*2*np.pi-np.pi), requires_grad=True)
+            # learning rate of quantum circuit
             if self.qc_lr:
-                #self.g_optimizer = torch.optim.Adam([
+                # can use either torch.optim.Adam or torch.optim.RMSprop
                 self.g_optimizer = torch.optim.RMSprop([
                     {'params':list(self.G.parameters())},
                     {'params': [self.gen_weights], 'lr': self.qc_lr}
                 ], lr=self.g_lr)
             else:
+                # can use either torch.optim.Adam or torch.optim.RMSprop
                 self.g_optimizer = torch.optim.RMSprop(list(self.G.parameters())+[self.gen_weights], self.g_lr)
-                #self.g_optimizer = torch.optim.Adam(list(self.G.parameters())+[self.gen_weights], self.g_lr)
 
     def build_model(self):
-        """Create a generator and a discriminator"""
+        """Create a generator, a discriminator and a v net"""
 
         # Models
         self.G = Generator(self.g_conv_dim, self.z_dim,
@@ -120,16 +123,10 @@ class Solver(object):
         self.D = Discriminator(self.d_conv_dim, self.m_dim, self.b_dim - 1, self.dropout)
         self.V = Discriminator(self.d_conv_dim, self.m_dim, self.b_dim - 1, self.dropout)
 
-        # Optimizers
+        # Optimizers can be RMSprop or Adam
         self.g_optimizer = torch.optim.RMSprop(self.G.parameters(), self.g_lr)
         self.d_optimizer = torch.optim.RMSprop(self.D.parameters(), self.d_lr)
         self.v_optimizer = torch.optim.RMSprop(self.V.parameters(), self.g_lr)
-
-        # Optimizer
-        #self.g_optimizer = torch.optim.Adam(self.G.parameters(), self.g_lr)
-        #self.d_optimizer = torch.optim.Adam(self.D.parameters(), self.d_lr)
-        #self.v_optimizer = torch.optim.Adam(self.V.parameters(), self.g_lr)
-
 
         # Print the networks
         self.print_network(self.G, 'G', self.log)
@@ -166,6 +163,7 @@ class Solver(object):
         self.V.load_state_dict(torch.load(V_path, map_location=lambda storage, loc: storage))
 
     def load_gen_weights(self, resume_iters):
+        """Restore the trained quantum circuit"""
         weights_pth = os.path.join(self.model_dir_path, 'molgan_red_weights.csv')
         import pandas as pd
         weights = pd.read_csv(weights_pth, header=None).iloc[resume_iters-1, 1:].values
@@ -175,7 +173,7 @@ class Solver(object):
         """Decay learning rates of the generator and discriminator."""
         for param_group in self.d_optimizer.param_groups:
             param_group['lr'] = d_lr
-        if self.quantum:
+        if self.qc_lr:
             pass
         else:
             for param_group in self.g_optimizer.param_groups:
@@ -206,10 +204,12 @@ class Solver(object):
         return out
 
     def sample_z(self, batch_size):
+        """Sample the random noise"""
         return np.random.normal(0, 1, size=(batch_size, self.z_dim))
 
     @staticmethod
     def postprocess(inputs, method, temperature=1.0):
+        """Convert the probability matrices into label matrices"""
         def listify(x):
             return x if type(x) == list or type(x) == tuple else [x]
 
@@ -225,6 +225,7 @@ class Solver(object):
         return [delistify(e) for e in (softmax)]
 
     def reward(self, mols):
+        """Calculate the rewards of mols"""
         rr = 1.
         for m in ('logp,sas,qed,unique' if self.metric == 'all' else self.metric).split(','):
             if m == 'np':
@@ -250,6 +251,7 @@ class Solver(object):
         return rr.reshape(-1, 1)
 
     def train_and_validate(self):
+        """Train and validate function"""
         self.start_time = time.time()
 
         # start training from scratch or resume training
@@ -259,6 +261,7 @@ class Solver(object):
             self.restore_model(self.resume_epoch)
             if self.quantum:
                 self.load_gen_weights(self.resume_epoch)
+        # restore models for test
         elif self.test_epoch is not None and self.mode == 'test':
             self.restore_model(self.test_epoch)
             if self.quantum:
@@ -266,7 +269,7 @@ class Solver(object):
         else:
             print('Training From Scratch...')
 
-        # start training
+        # start training loop or test phase
         if self.mode == 'train':
             print('Start training...')
             for i in range(start_epoch, self.num_epochs):
@@ -280,12 +283,14 @@ class Solver(object):
             raise NotImplementedError
 
     def get_gen_mols(self, n_hat, e_hat, method):
+        """Convert edges and nodes matrices into molecules"""
         (edges_hard, nodes_hard) = self.postprocess((e_hat, n_hat), method)
         edges_hard, nodes_hard = torch.max(edges_hard, -1)[1], torch.max(nodes_hard, -1)[1]
         mols = [self.data.matrices2mol(n_.data.cpu().numpy(), e_.data.cpu().numpy(), strict=True) for e_, n_ in zip(edges_hard, nodes_hard)]
         return mols
 
     def get_reward(self, n_hat, e_hat, method):
+        """Get the reward from edges and nodes matrices"""
         (edges_hard, nodes_hard) = self.postprocess((e_hat, n_hat), method)
         edges_hard, nodes_hard = torch.max(edges_hard, -1)[1], torch.max(nodes_hard, -1)[1]
         mols = [self.data.matrices2mol(n_.data.cpu().numpy(), e_.data.cpu().numpy(), strict=True) for e_, n_ in zip(edges_hard, nodes_hard)]
@@ -293,6 +298,7 @@ class Solver(object):
         return reward
 
     def save_checkpoints(self, epoch_i):
+        """store the models and quantum circuit"""
         G_path = os.path.join(self.model_dir_path, '{}-G.ckpt'.format(epoch_i + 1))
         D_path = os.path.join(self.model_dir_path, '{}-D.ckpt'.format(epoch_i + 1))
         V_path = os.path.join(self.model_dir_path, '{}-V.ckpt'.format(epoch_i + 1))
@@ -309,6 +315,7 @@ class Solver(object):
             self.log.info('Saved model checkpoints into {}...'.format(self.model_dir_path))
 
     def train_or_valid(self, epoch_i, train_val_test='val'):
+        """Train or valid function"""
         # The first several epochs using RL to purse stability (not used)
         if epoch_i < 0:
             cur_la = 0
