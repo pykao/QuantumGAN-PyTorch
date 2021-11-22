@@ -1,3 +1,6 @@
+# Generated_molecules
+generated_molecules/*
+
 # Jupyter notebook
 *.ipynb
 
