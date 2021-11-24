@@ -76,16 +76,25 @@ if __name__ == '__main__':
     config = get_GAN_config()
 
     # GPU
-    os.environ["CUDA_VISIBLE_DEVICES"]="6"
+    os.environ["CUDA_VISIBLE_DEVICES"]="0"
 
     # molecule dataset dir
     config.mol_data_dir = r'data/gdb9_9nodes.sparsedataset'
     #config.mol_data_dir = r'data/qm9_5k.sparsedataset'
 
     # Quantum
+    # quantum circuit to generate inputs of MolGAN
     config.quantum = True
     config.qubits = 8
-    config.qc_lr = 0.04
+    # update the parameters of quantum circuit
+    config.update_qc = False
+    # the learning rate of quantum circuit
+    # None: same learning rate as g_lr
+    config.qc_lr = None
+    # number of layer for quantum circuit
+    config.layer = 1
+    # to use pretrained quantum circuit or not
+    config.qc_pretrained = True
 
 
     # Training
@@ -93,13 +102,14 @@ if __name__ == '__main__':
     config.complexity = 'mr'
     config.batch_size = 128
     config.z_dim = 8
-    config.num_epochs = 10
-    config.n_critic = 3
+    config.num_epochs = 150
+    config.n_critic = 5
     config.critic_type = 'D'
     # 1.0 for pure WGAN and 0.0 for pure RL
     config.lambda_wgan = 1
     # weight decay
-    config.decay_every_epoch = 1
+    #config.decay_every_epoch = None
+    #config.gamma = 0.1
 
     # Test
     #config.mode = "test"
@@ -110,7 +120,7 @@ if __name__ == '__main__':
     # MolGAN
     #config.saving_dir = r"results/GAN/20211014_151730/train"
     # Quantum
-    #config.saving_dir = r"results/quantum-GAN/20211112_151724/train"
+    #config.saving_dir = r"results/quantum-GAN/20211122_120334/train"
 
 
 
