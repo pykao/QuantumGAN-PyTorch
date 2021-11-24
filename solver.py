@@ -36,6 +36,7 @@ class Solver(object):
         self.layer = config.layer
         self.qubits = config.qubits
         self.gen_circuit = config.gen_circuit
+        self.update_qc = config.update_qc
         self.qc_lr = config.qc_lr
         self.qc_pretrained = config.qc_pretrained
 
@@ -112,15 +113,19 @@ class Solver(object):
 
             # learning rate of quantum circuit
             # the learning rate of quantum circuit is different from the learning rate of generator
-            if self.qc_lr:
-                # can use either torch.optim.Adam or torch.optim.RMSprop
-                self.g_optimizer = torch.optim.RMSprop([
-                    {'params':list(self.G.parameters())},
-                    {'params': [self.gen_weights], 'lr': self.qc_lr}
-                ], lr=self.g_lr)
+            if self.update_qc:
+                if self.qc_lr:
+                    # can use either torch.optim.Adam or torch.optim.RMSprop
+                    self.g_optimizer = torch.optim.RMSprop([
+                        {'params':list(self.G.parameters())},
+                        {'params': [self.gen_weights], 'lr': self.qc_lr}
+                    ], lr=self.g_lr)
+                else:
+                    # can use either torch.optim.Adam or torch.optim.RMSprop
+                    self.g_optimizer = torch.optim.RMSprop(list(self.G.parameters())+[self.gen_weights], self.g_lr)
             else:
                 # can use either torch.optim.Adam or torch.optim.RMSprop
-                self.g_optimizer = torch.optim.RMSprop(list(self.G.parameters())+[self.gen_weights], self.g_lr)
+                self.g_optimizer = torch.optim.RMSprop(list(self.G.parameters()), self.g_lr)
 
     def build_model(self):
         """Create a generator, a discriminator and a v net"""
