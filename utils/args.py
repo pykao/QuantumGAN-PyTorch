@@ -11,6 +11,7 @@ def get_GAN_config():
     #parser.add_argument('--patches', type=int, default=1, help='number of quantum circuit patches')
     parser.add_argument('--layer', type=int, default=1, help='number of repeated variational quantum layer')
     parser.add_argument('--qubits', type=int, default=8, help='number of qubits and dimension of domain labels')
+    parser.add_argument('--update_qc', type=bool, default=True, help='choose to update the quantum circuit')
     parser.add_argument('--qc_lr', type=float, default=None, help='learning rate of quantum circuit')
     parser.add_argument('--qc_pretrained', type=bool, default=False, help='choose to use pretrained quantum circuit')
 
