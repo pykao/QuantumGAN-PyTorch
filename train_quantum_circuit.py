@@ -10,6 +10,12 @@ import os
 import pandas as pd
 import torch
 import csv
+
+model_dir = 'results/quantum_circuit/'
+
+if not os.path.exists(model_dir):
+    os.makedirs(model_dir)
+
 np.random.seed(42)
 
 qubits = 8
@@ -32,7 +38,6 @@ def sample_z(sbatch_size):
 
 dev = qml.device('default.qubit', wires=qubits)
 @qml.qnode(dev, interface='torch', diff_method='backprop')
-
 def gen_circuit(w):
     # random noise as generator input
     z1 = random.uniform(-1, 1)
@@ -73,7 +78,7 @@ for n in range(iteration):
         best_cost = output
         best_params = gen_weights
         print(n, best_cost)
-        with open(os.path.join('molgan_red_weights.csv'), 'a') as file:
+        with open(os.path.join(model_dir, 'molgan_red_weights.csv'), 'a') as file:
             writer = csv.writer(file)
             writer.writerow([str(n)]+list(best_params.detach().numpy()))
 
