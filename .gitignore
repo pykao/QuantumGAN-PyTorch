@@ -4,9 +4,6 @@ generated_molecules/*
 # csv files
 *.csv
 
-# Jupyter notebook
-*.ipynb
-
 # results
 results/
 
