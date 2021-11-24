@@ -41,9 +41,9 @@ You need to comment or uncomment some lines of code in the main function.
 python sparse_molecular_dataset.py
 ```
 
-## MolGAN
+## MolGAN and Quantum-GAN
 
-Simply run the following command to train the MolGAN.
+Simply run the following command to train the MolGAN or Quantum-GAN.
 
 ```python
 python main.py
@@ -53,13 +53,17 @@ You are able to define the training parameters within the training block of the 
 
 ## Testing Phase
 
-Simply run the same command to test the MolGAN. 
+Simply run the same command to test the MolGAN or Quantum-GAN. 
 
 You need to comment the training section and uncomment the testing section in the main function of `main.py`
 
 ```python
 python main.py
 ```
+
+## Others
+
+`results` folder stores the log files, trained models, pretrained quantum circuits, and the testing results.
 
 ## Credits
 This repository refers to the following repositories:
