@@ -5,6 +5,7 @@ import os
 import time
 import datetime
 import numpy as np
+import pandas as pd
 
 import pennylane as qml
 import random
@@ -36,6 +37,7 @@ class Solver(object):
         self.qubits = config.qubits
         self.gen_circuit = config.gen_circuit
         self.qc_lr = config.qc_lr
+        self.qc_pretrained = config.qc_pretrained
 
         # Model configurations
         self.z_dim = config.z_dim
@@ -98,9 +100,18 @@ class Solver(object):
         self.build_model()
 
         # Quantum
+        # quantum or not
         if config.quantum:
-            self.gen_weights = torch.tensor(list(np.random.rand(config.layer*(config.qubits*2-1))*2*np.pi-np.pi), requires_grad=True)
+
+            # use pretrained weights or not
+            if config.qc_pretrained:
+                self.pretrained_qc_weights = pd.read_csv('results/quantum_circuit/molgan_red_weights.csv', header=None).iloc[-1, 1:].values
+                self.gen_weights = torch.tensor(list(self.pretrained_qc_weights), requires_grad=True)
+            else:
+                self.gen_weights = torch.tensor(list(np.random.rand(config.layer*(config.qubits*2-1))*2*np.pi-np.pi), requires_grad=True)
+
             # learning rate of quantum circuit
+            # the learning rate of quantum circuit is different from the learning rate of generator
             if self.qc_lr:
                 # can use either torch.optim.Adam or torch.optim.RMSprop
                 self.g_optimizer = torch.optim.RMSprop([
@@ -165,7 +176,6 @@ class Solver(object):
     def load_gen_weights(self, resume_iters):
         """Restore the trained quantum circuit"""
         weights_pth = os.path.join(self.model_dir_path, 'molgan_red_weights.csv')
-        import pandas as pd
         weights = pd.read_csv(weights_pth, header=None).iloc[resume_iters-1, 1:].values
         self.gen_weights = torch.tensor(list(weights), requires_grad=True)
 
