@@ -11,7 +11,7 @@ import pandas as pd
 import torch
 import csv
 
-model_dir = 'results/quantum_circuit/'
+model_dir = 'results/quantum_circuit/layer_3/gaussian'
 
 if not os.path.exists(model_dir):
     os.makedirs(model_dir)
@@ -20,7 +20,7 @@ np.random.seed(42)
 
 qubits = 8
 
-layer = 1
+layer = 3
 
 batch_size = 512
 
@@ -35,6 +35,8 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 def sample_z(sbatch_size):
     """Sample the random noise"""
     return np.random.normal(0, 1, size=(batch_size, z_dim))
+    #return np.random.uniform(-1, 1, size=(batch_size, z_dim))
+
 
 dev = qml.device('default.qubit', wires=qubits)
 @qml.qnode(dev, interface='torch', diff_method='backprop')
