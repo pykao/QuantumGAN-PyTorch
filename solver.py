@@ -536,6 +536,7 @@ class Solver(object):
             losses['FD/bond'].append(fd_bond)
             losses['FD/bond_atom'].append(fd_bond_atom)
 
+            ######### Save into Tensorboard ##########
 
             if train_val_test == 'train' and self.use_tensorboard:
                 for tag, value in loss_tb.items():
