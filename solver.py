@@ -7,6 +7,8 @@ import datetime
 import numpy as np
 import pandas as pd
 
+from frechetdist import frdist
+
 import pennylane as qml
 import random
 
@@ -517,6 +519,22 @@ class Solver(object):
                         else:
                             train_step_G.backward(retain_graph=True)
                             self.g_optimizer.step()
+
+
+            ########## Frechet distribution ##########
+            R = [list(a[i].reshape(-1))  for i in range(self.batch_size)]
+            F = [list(edges_hard[i].reshape(-1))  for i in range(self.batch_size)]
+            fd_bond = frdist(R, F)
+
+            R=[list(x[i]) + list(a[i].reshape(-1))  for i in range(self.batch_size)]
+            F=[list(nodes_hard[i]) + list(edges_hard[i].reshape(-1))  for i in range(self.batch_size)]
+            fd_bond_atom = frdist(R, F)
+
+            loss_tb['FD/bond'] = fd_bond
+            loss_tb['FD/bond_atom'] = fd_bond_atom
+
+            losses['FD/bond'].append(fd_bond)
+            losses['FD/bond_atom'].append(fd_bond_atom)
 
 
             if train_val_test == 'train' and self.use_tensorboard:
