@@ -468,6 +468,8 @@ class Solver(object):
             reward_r = torch.from_numpy(self.reward(mols)).to(self.device)
             # Fake Reward
             reward_f = self.get_reward(nodes_hat, edges_hat, self.post_method)
+            (edges_hard, nodes_hard) = self.postprocess((edges_logits, nodes_logits), 'hard_gumbel')
+            edges_hard, nodes_hard = torch.max(edges_hard, -1)[1], torch.max(nodes_hard, -1)[1]
 
             # Losses Update
             loss_G = -logits_fake
