@@ -522,21 +522,21 @@ class Solver(object):
                             train_step_G.backward(retain_graph=True)
                             self.g_optimizer.step()
 
+            if self.mode == 'train':
+                ########## Frechet distribution ##########
+                R = [list(a.cpu()[i].reshape(-1)) for i in range(self.batch_size)]
+                F = [list(edges_hard.cpu()[i].reshape(-1)) for i in range(self.batch_size)]
+                fd_bond = frdist(R, F)
 
-            ########## Frechet distribution ##########
-            R = [list(a[i].reshape(-1))  for i in range(self.batch_size)]
-            F = [list(edges_hard[i].reshape(-1))  for i in range(self.batch_size)]
-            fd_bond = frdist(R, F)
+                R=[list(x.cpu()[i]) + list(a.cpu()[i].reshape(-1)) for i in range(self.batch_size)]
+                F=[list(nodes_hard.cpu()[i]) + list(edges_hard.cpu()[i].reshape(-1))  for i in range(self.batch_size)]
+                fd_bond_atom = frdist(R, F)
 
-            R=[list(x[i]) + list(a[i].reshape(-1))  for i in range(self.batch_size)]
-            F=[list(nodes_hard[i]) + list(edges_hard[i].reshape(-1))  for i in range(self.batch_size)]
-            fd_bond_atom = frdist(R, F)
+                loss_tb['FD/bond'] = fd_bond
+                loss_tb['FD/bond_atom'] = fd_bond_atom
 
-            loss_tb['FD/bond'] = fd_bond
-            loss_tb['FD/bond_atom'] = fd_bond_atom
-
-            losses['FD/bond'].append(fd_bond)
-            losses['FD/bond_atom'].append(fd_bond_atom)
+                losses['FD/bond'].append(fd_bond)
+                losses['FD/bond_atom'].append(fd_bond_atom)
 
             ######### Save into Tensorboard ##########
 
