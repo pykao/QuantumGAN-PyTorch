@@ -162,7 +162,7 @@ if __name__ == '__main__':
             while z1 < -1 or z1 > 1:
                 z1 = random.gauss(0, 0.3)
             while z2 < -1 or z2 > 1:
-                z2 = randoom.gauss(0, 0.3)
+                z2 = random.gauss(0, 0.3)
         else:
             z1 = random.uniform(-1, 1)
             z2 = random.uniform(-1, 1)
