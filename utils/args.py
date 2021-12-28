@@ -14,6 +14,7 @@ def get_GAN_config():
     parser.add_argument('--update_qc', type=bool, default=True, help='choose to update the quantum circuit')
     parser.add_argument('--qc_lr', type=float, default=None, help='learning rate of quantum circuit')
     parser.add_argument('--qc_pretrained', type=bool, default=False, help='choose to use pretrained quantum circuit')
+    parser.add_argument('--qc_init_state', type=str, default='uniform', help='initial state of quantum circuit. uniform or gaussian')
 
     # Model configuration
     parser.add_argument('--complexity', type=str, default='nr', help='dimension of domain labels')
