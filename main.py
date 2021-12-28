@@ -76,7 +76,7 @@ if __name__ == '__main__':
     config = get_GAN_config()
 
     # GPU
-    os.environ["CUDA_VISIBLE_DEVICES"]="0"
+    os.environ["CUDA_VISIBLE_DEVICES"]="4"
 
 
     # Dataset
@@ -91,15 +91,15 @@ if __name__ == '__main__':
     # number of qubit of quantum circuit
     config.qubits = 8
     # number of layer of quantum circuit
-    config.layer = 5
+    config.layer = 3
     # update the parameters of quantum circuit
     config.update_qc = True
     # the learning rate of quantum circuit
     # None: same learning rate as g_lr
     config.qc_lr = 0.04
     # initial state of quantum circuit (can be either uniform or gaussian)
-    config.qc_init_state = 'uniform'
-    #config.qc_init_state = 'gaussian'
+    #config.qc_init_state = 'uniform'
+    config.qc_init_state = 'gaussian'
     # to use pretrained quantum circuit or not
     config.qc_pretrained = False
 
@@ -115,7 +115,7 @@ if __name__ == '__main__':
     # number of epoch
     config.num_epochs = 30
     # n_critic
-    config.n_critic = 3
+    config.n_critic = 5
     # critic type
     config.critic_type = 'D'
     # 1.0 for pure WGAN and 0.0 for pure RL
@@ -157,8 +157,12 @@ if __name__ == '__main__':
     def gen_circuit(w, qc_init_state='uniform'):
         # random noise as generator input
         if qc_init_state == 'gaussian':
-            z1 = random.gauss(0, 1)
-            z1 = random.gauss(0, 1)
+            z1 = random.gauss(0, 0.3)
+            z2 = random.gauss(0, 0.3)
+            while z1 < -1 or z1 > 1:
+                z1 = random.gauss(0, 0.3)
+            while z2 < -1 or z2 > 1:
+                z2 = randoom.gauss(0, 0.3)
         else:
             z1 = random.uniform(-1, 1)
             z2 = random.uniform(-1, 1)
