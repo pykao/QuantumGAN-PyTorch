@@ -40,6 +40,7 @@ class Solver(object):
         self.gen_circuit = config.gen_circuit
         self.update_qc = config.update_qc
         self.qc_lr = config.qc_lr
+        self.qc_init_state = config.qc_init_state
         self.qc_pretrained = config.qc_pretrained
 
         # Model configurations
@@ -370,13 +371,13 @@ class Solver(object):
             elif train_val_test == 'val' and self.quantum:
                 if self.test_sample_size is None:
                     mols, _, _, a, x, _, _, _, _ = self.data.next_validation_batch()
-                    sample_list = [self.gen_circuit(self.gen_weights) for i in range(a.shape[0])]
+                    sample_list = [self.gen_circuit(self.gen_weights, self.qc_init_state) for i in range(a.shape[0])]
                 else:
                     mols, _, _, a, x, _, _, _, _ = self.data.next_validation_batch(self.test_sample_size)
-                    sample_list = [self.gen_circuit(self.gen_weights) for i in range(self.test_sample_size)]
+                    sample_list = [self.gen_circuit(self.gen_weights, self.qc_init_state) for i in range(self.test_sample_size)]
             elif train_val_test == 'train' and self.quantum:
                 mols, _, _, a, x, _, _, _, _ = self.data.next_train_batch(self.batch_size)
-                sample_list = [self.gen_circuit(self.gen_weights) for i in range(self.batch_size)]
+                sample_list = [self.gen_circuit(self.gen_weights, self.qc_init_state) for i in range(self.batch_size)]
 
             # Error
             else:
