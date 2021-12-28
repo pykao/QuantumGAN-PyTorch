@@ -76,7 +76,7 @@ if __name__ == '__main__':
     config = get_GAN_config()
 
     # GPU
-    os.environ["CUDA_VISIBLE_DEVICES"]="1"
+    os.environ["CUDA_VISIBLE_DEVICES"]="3"
 
 
     # Dataset
@@ -87,30 +87,33 @@ if __name__ == '__main__':
 
     # Quantum
     # quantum circuit to generate inputs of MolGAN
-    config.quantum = True
+    config.quantum = False
     # number of qubit of quantum circuit
     config.qubits = 8
     # number of layer of quantum circuit
-    config.layer = 3
+    config.layer = 1
     # update the parameters of quantum circuit
     config.update_qc = True
     # the learning rate of quantum circuit
     # None: same learning rate as g_lr
     config.qc_lr = 0.04
+    # initial state of quantum circuit (can be either uniform or gaussian)
+    #config.qc_init_state = 'uniform'
+    config.qc_init_state = 'gaussian'
     # to use pretrained quantum circuit or not
-    # config.qc_pretrained = False
+    config.qc_pretrained = False
 
 
     # Training
     config.mode = 'train'
     # the complexity of generator
-    config.complexity = 'mr'
+    config.complexity = 'hr'
     # batch size
     config.batch_size = 128
     # input noise dimension
     config.z_dim = 8
     # number of epoch
-    config.num_epochs = 300
+    config.num_epochs = 600
     # n_critic
     config.n_critic = 3
     # critic type
@@ -118,7 +121,7 @@ if __name__ == '__main__':
     # 1.0 for pure WGAN and 0.0 for pure RL
     config.lambda_wgan = 1
     # weight decay
-    config.decay_every_epoch = 60
+    config.decay_every_epoch = None
     config.gamma = 0.1
 
 
@@ -126,12 +129,12 @@ if __name__ == '__main__':
     #config.mode = "test"
     #config.complexity = 'mr'
     #config.test_sample_size = 5000
-    #config.z_dim = 8
+    #config.z_dim = 1
     #config.test_epoch = 30
     # MolGAN
-    #config.saving_dir = r"results/GAN/20211014_151730/train"
+    #config.saving_dir = r"results/GAN/20211223_130523/train"
     # Quantum
-    #config.saving_dir = r"results/quantum-GAN/20211130_102404/train"
+    #config.saving_dir = r"results/quantum-GAN/20211206_123950/train"
 
 
     if config.complexity == 'nr':
@@ -151,10 +154,14 @@ if __name__ == '__main__':
     # Quantum Circuit
     dev = qml.device('default.qubit', wires=config.qubits)
     @qml.qnode(dev, interface='torch', diff_method='backprop')
-    def gen_circuit(w):
+    def gen_circuit(w, qc_init_state='uniform'):
         # random noise as generator input
-        z1 = random.uniform(-1, 1)
-        z2 = random.uniform(-1, 1)
+        if qc_init_state == 'gaussian':
+            z1 = random.gauss(0, 1)
+            z1 = random.gauss(0, 1)
+        else:
+            z1 = random.uniform(-1, 1)
+            z2 = random.uniform(-1, 1)
         # construct generator circuit for both atom vector and node matrix
         for i in range(config.qubits):
             qml.RY(np.arcsin(z1), wires=i)
@@ -171,5 +178,7 @@ if __name__ == '__main__':
     config.gen_circuit = gen_circuit
 
     print(config)
+
+    exit()
 
     main(config)
