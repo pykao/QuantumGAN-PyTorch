@@ -76,7 +76,7 @@ if __name__ == '__main__':
     config = get_GAN_config()
 
     # GPU
-    os.environ["CUDA_VISIBLE_DEVICES"]="3"
+    os.environ["CUDA_VISIBLE_DEVICES"]="0"
 
 
     # Dataset
@@ -87,19 +87,19 @@ if __name__ == '__main__':
 
     # Quantum
     # quantum circuit to generate inputs of MolGAN
-    config.quantum = False
+    config.quantum = True
     # number of qubit of quantum circuit
     config.qubits = 8
     # number of layer of quantum circuit
-    config.layer = 1
+    config.layer = 5
     # update the parameters of quantum circuit
     config.update_qc = True
     # the learning rate of quantum circuit
     # None: same learning rate as g_lr
     config.qc_lr = 0.04
     # initial state of quantum circuit (can be either uniform or gaussian)
-    #config.qc_init_state = 'uniform'
-    config.qc_init_state = 'gaussian'
+    config.qc_init_state = 'uniform'
+    #config.qc_init_state = 'gaussian'
     # to use pretrained quantum circuit or not
     config.qc_pretrained = False
 
@@ -107,13 +107,13 @@ if __name__ == '__main__':
     # Training
     config.mode = 'train'
     # the complexity of generator
-    config.complexity = 'hr'
+    config.complexity = 'mr'
     # batch size
     config.batch_size = 128
     # input noise dimension
     config.z_dim = 8
     # number of epoch
-    config.num_epochs = 600
+    config.num_epochs = 30
     # n_critic
     config.n_critic = 3
     # critic type
@@ -178,7 +178,5 @@ if __name__ == '__main__':
     config.gen_circuit = gen_circuit
 
     print(config)
-
-    exit()
 
     main(config)
