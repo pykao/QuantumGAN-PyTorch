@@ -76,7 +76,7 @@ if __name__ == '__main__':
     config = get_GAN_config()
 
     # GPU
-    os.environ["CUDA_VISIBLE_DEVICES"]="4"
+    os.environ["CUDA_VISIBLE_DEVICES"]="0"
 
 
     # Dataset
@@ -87,54 +87,54 @@ if __name__ == '__main__':
 
     # Quantum
     # quantum circuit to generate inputs of MolGAN
-    config.quantum = True
+    config.quantum = False
     # number of qubit of quantum circuit
     config.qubits = 8
     # number of layer of quantum circuit
-    config.layer = 3
+    config.layer = 1
     # update the parameters of quantum circuit
     config.update_qc = True
     # the learning rate of quantum circuit
     # None: same learning rate as g_lr
     config.qc_lr = 0.04
     # initial state of quantum circuit (can be either uniform or gaussian)
-    #config.qc_init_state = 'uniform'
-    config.qc_init_state = 'gaussian'
+    config.qc_init_state = 'uniform'
+    #config.qc_init_state = 'gaussian'
     # to use pretrained quantum circuit or not
     config.qc_pretrained = False
 
 
     # Training
-    config.mode = 'train'
+    #config.mode = 'train'
     # the complexity of generator
-    config.complexity = 'mr'
+    #config.complexity = 'mr'
     # batch size
-    config.batch_size = 128
+    #config.batch_size = 128
     # input noise dimension
-    config.z_dim = 8
+    #config.z_dim = 8
     # number of epoch
-    config.num_epochs = 30
+    #config.num_epochs = 300
     # n_critic
-    config.n_critic = 5
+    #config.n_critic = 5
     # critic type
-    config.critic_type = 'D'
+    #config.critic_type = 'D'
     # 1.0 for pure WGAN and 0.0 for pure RL
-    config.lambda_wgan = 1
+    #config.lambda_wgan = 1
     # weight decay
-    config.decay_every_epoch = None
-    config.gamma = 0.1
+    #config.decay_every_epoch = None
+    #config.gamma = 0.1
 
 
     # Testing
-    #config.mode = "test"
-    #config.complexity = 'mr'
-    #config.test_sample_size = 5000
-    #config.z_dim = 1
-    #config.test_epoch = 30
+    config.mode = "test"
+    config.complexity = 'mr'
+    config.test_sample_size = 5000
+    config.z_dim = 7
+    config.test_epoch = 300
     # MolGAN
-    #config.saving_dir = r"results/GAN/20211223_130523/train"
+    config.saving_dir = r"results/GAN/20211228_114447/train"
     # Quantum
-    #config.saving_dir = r"results/quantum-GAN/20211206_123950/train"
+    #config.saving_dir = r"results/quantum-GAN/20211228_174129/train"
 
 
     if config.complexity == 'nr':
