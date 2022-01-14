@@ -76,7 +76,7 @@ if __name__ == '__main__':
     config = get_GAN_config()
 
     # GPU
-    os.environ["CUDA_VISIBLE_DEVICES"]="0"
+    os.environ["CUDA_VISIBLE_DEVICES"]=""
 
 
     # Dataset
@@ -107,7 +107,7 @@ if __name__ == '__main__':
     # Training
     #config.mode = 'train'
     # the complexity of generator
-    #config.complexity = 'mr'
+    #config.complexity = 'nr'
     # batch size
     #config.batch_size = 128
     # input noise dimension
@@ -129,12 +129,12 @@ if __name__ == '__main__':
     config.mode = "test"
     config.complexity = 'mr'
     config.test_sample_size = 5000
-    config.z_dim = 7
-    config.test_epoch = 300
+    config.z_dim = 3
+    config.test_epoch = 150
     # MolGAN
-    config.saving_dir = r"results/GAN/20211228_114447/train"
+    config.saving_dir = r"results/GAN/20211220_111731/train"
     # Quantum
-    #config.saving_dir = r"results/quantum-GAN/20211228_174129/train"
+    #config.saving_dir = r"results/quantum-GAN/20211207_141208/train"
 
 
     if config.complexity == 'nr':
