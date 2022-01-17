@@ -76,7 +76,7 @@ if __name__ == '__main__':
     config = get_GAN_config()
 
     # GPU
-    os.environ["CUDA_VISIBLE_DEVICES"]=""
+    os.environ["CUDA_VISIBLE_DEVICES"]="0"
 
 
     # Dataset
@@ -129,10 +129,10 @@ if __name__ == '__main__':
     config.mode = "test"
     config.complexity = 'mr'
     config.test_sample_size = 5000
-    config.z_dim = 3
-    config.test_epoch = 150
+    config.z_dim = 8
+    config.test_epoch = 300
     # MolGAN
-    config.saving_dir = r"results/GAN/20211220_111731/train"
+    config.saving_dir = r"results/GAN/20220111_113504/train"
     # Quantum
     #config.saving_dir = r"results/quantum-GAN/20211207_141208/train"
 
