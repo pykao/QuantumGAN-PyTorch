@@ -87,11 +87,11 @@ if __name__ == '__main__':
 
     # Quantum
     # quantum circuit to generate inputs of MolGAN
-    config.quantum = False
+    config.quantum = True
     # number of qubit of quantum circuit
-    config.qubits = 8
+    config.qubits = 2
     # number of layer of quantum circuit
-    config.layer = 1
+    config.layer = 3
     # update the parameters of quantum circuit
     config.update_qc = True
     # the learning rate of quantum circuit
@@ -107,13 +107,13 @@ if __name__ == '__main__':
     # Training
     #config.mode = 'train'
     # the complexity of generator
-    #config.complexity = 'nr'
+    #config.complexity = 'mr'
     # batch size
     #config.batch_size = 128
     # input noise dimension
-    #config.z_dim = 8
+    #config.z_dim = 4
     # number of epoch
-    #config.num_epochs = 300
+    #config.num_epochs = 1
     # n_critic
     #config.n_critic = 5
     # critic type
@@ -129,12 +129,12 @@ if __name__ == '__main__':
     config.mode = "test"
     config.complexity = 'mr'
     config.test_sample_size = 5000
-    config.z_dim = 8
+    config.z_dim = 2
     config.test_epoch = 300
     # MolGAN
-    config.saving_dir = r"results/GAN/20220111_113504/train"
+    #config.saving_dir = r"results/GAN/20220111_113504/train"
     # Quantum
-    #config.saving_dir = r"results/quantum-GAN/20211207_141208/train"
+    config.saving_dir = r"results/quantum-GAN/20220111_153728/train"
 
 
     if config.complexity == 'nr':
