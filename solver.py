@@ -523,7 +523,7 @@ class Solver(object):
                             train_step_G.backward(retain_graph=True)
                             self.g_optimizer.step()
 
-            if self.mode == 'train':
+            if self.mode == 'train' or self.mode == 'test':
                 ########## Frechet distribution ##########
                 R = [list(a.cpu()[i].reshape(-1)) for i in range(self.batch_size)]
                 F = [list(edges_hard.cpu()[i].reshape(-1)) for i in range(self.batch_size)]
