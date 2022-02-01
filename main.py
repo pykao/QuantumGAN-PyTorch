@@ -113,7 +113,7 @@ if __name__ == '__main__':
     # input noise dimension
     config.z_dim = 4
     # number of epoch
-    config.num_epochs = 1
+    config.num_epochs = 300
     # n_critic
     config.n_critic = 5
     # critic type
@@ -122,7 +122,7 @@ if __name__ == '__main__':
     config.lambda_wgan = 1
     # weight decay
     config.decay_every_epoch = None
-    config.gamma = 0.1
+    #config.gamma = 0.1
 
     # Testing
     #config.mode = "test"
