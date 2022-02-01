@@ -76,7 +76,7 @@ if __name__ == '__main__':
     config = get_GAN_config()
 
     # GPU
-    os.environ["CUDA_VISIBLE_DEVICES"]="0"
+    os.environ["CUDA_VISIBLE_DEVICES"]="6"
 
 
     # Dataset
@@ -135,20 +135,21 @@ if __name__ == '__main__':
     config.lambda_wgan = 1
     config.decay_every_epoch = None
     config.resume_epoch = 150
-    config.saving_dir = r"results/quantum-GAN/20220119_140127/train"
-
-
+    config.model_dir_path = r"results/quantum-GAN/20220119_140127/train/model_dir"
+    config.img_dir_path = r"results/quantum-GAN/20220119_140127/train/img_dir"
+    config.log_dir_path = r"results/quantum-GAN/20220119_140127/train/log_dir"
+    config.saving_dir = r"results/quantum-GAN/20220119_140127"
 
     # Testing
-    config.mode = "test"
-    config.complexity = 'mr'
-    config.test_sample_size = 5000
-    config.z_dim = 4
-    config.test_epoch = 120
+    #config.mode = "test"
+    #config.complexity = 'mr'
+    #config.test_sample_size = 5000
+    #config.z_dim = 4
+    #config.test_epoch = 120
     # MolGAN
     #config.saving_dir = r"results/GAN/20220111_113504/train"
     # Quantum
-    config.saving_dir = r"results/quantum-GAN/20220119_140127/train"
+    #config.saving_dir = r"results/quantum-GAN/20220119_140127/train"
 
 
     if config.complexity == 'nr':
