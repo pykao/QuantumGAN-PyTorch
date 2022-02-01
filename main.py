@@ -105,40 +105,24 @@ if __name__ == '__main__':
 
 
     # Training
-    #config.mode = 'train'
-    # the complexity of generator
-    #config.complexity = 'mr'
-    # batch size
-    #config.batch_size = 128
-    # input noise dimension
-    #config.z_dim = 4
-    # number of epoch
-    #config.num_epochs = 1
-    # n_critic
-    #config.n_critic = 5
-    # critic type
-    #config.critic_type = 'D'
-    # 1.0 for pure WGAN and 0.0 for pure RL
-    #config.lambda_wgan = 1
-    # weight decay
-    #config.decay_every_epoch = None
-    #config.gamma = 0.1
-
-    # Resume training
     config.mode = 'train'
+    # the complexity of generator
     config.complexity = 'mr'
+    # batch size
     config.batch_size = 128
+    # input noise dimension
     config.z_dim = 4
-    config.num_epochs = 300
+    # number of epoch
+    config.num_epochs = 1
+    # n_critic
     config.n_critic = 5
+    # critic type
     config.critic_type = 'D'
+    # 1.0 for pure WGAN and 0.0 for pure RL
     config.lambda_wgan = 1
+    # weight decay
     config.decay_every_epoch = None
-    config.resume_epoch = 150
-    config.model_dir_path = r"results/quantum-GAN/20220119_140127/train/model_dir"
-    config.img_dir_path = r"results/quantum-GAN/20220119_140127/train/img_dir"
-    config.log_dir_path = r"results/quantum-GAN/20220119_140127/train/log_dir"
-    config.saving_dir = r"results/quantum-GAN/20220119_140127"
+    config.gamma = 0.1
 
     # Testing
     #config.mode = "test"
