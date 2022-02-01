@@ -23,12 +23,14 @@ def main(config):
     cudnn.benchmark = True
 
     # Timestamp
-    if config.mode == 'train':
+    if config.mode == 'train' and config.resume_epoch is None:
         a_train_time = get_date_postfix()
         config.saving_dir = os.path.join(config.saving_dir, a_train_time)
         config.log_dir_path = os.path.join(config.saving_dir, config.mode, 'log_dir')
         config.model_dir_path = os.path.join(config.saving_dir, config.mode, 'model_dir')
         config.img_dir_path = os.path.join(config.saving_dir, config.mode, 'img_dir')
+    elif config.mode == 'train' and config.resume_epoch is not None:
+        pass
     else:
         a_test_time = get_date_postfix()
         config.saving_dir = os.path.join(config.saving_dir)
@@ -105,35 +107,35 @@ if __name__ == '__main__':
 
 
     # Training
-    config.mode = 'train'
+    #config.mode = 'train'
     # the complexity of generator
-    config.complexity = 'mr'
+    #config.complexity = 'mr'
     # batch size
-    config.batch_size = 128
+    #config.batch_size = 128
     # input noise dimension
-    config.z_dim = 4
+    #config.z_dim = 4
     # number of epoch
-    config.num_epochs = 300
+    #config.num_epochs = 300
     # n_critic
-    config.n_critic = 5
+    #config.n_critic = 5
     # critic type
-    config.critic_type = 'D'
+    #config.critic_type = 'D'
     # 1.0 for pure WGAN and 0.0 for pure RL
-    config.lambda_wgan = 1
+    #config.lambda_wgan = 1
     # weight decay
-    config.decay_every_epoch = None
+    #config.decay_every_epoch = None
     #config.gamma = 0.1
 
     # Testing
-    #config.mode = "test"
-    #config.complexity = 'mr'
-    #config.test_sample_size = 5000
-    #config.z_dim = 4
-    #config.test_epoch = 120
+    config.mode = "test"
+    config.complexity = 'mr'
+    config.test_sample_size = 5000
+    config.z_dim = 4
+    config.test_epoch = 150
     # MolGAN
     #config.saving_dir = r"results/GAN/20220111_113504/train"
     # Quantum
-    #config.saving_dir = r"results/quantum-GAN/20220119_140127/train"
+    config.saving_dir = r"results/quantum-GAN/20220119_140127/train"
 
 
     if config.complexity == 'nr':
