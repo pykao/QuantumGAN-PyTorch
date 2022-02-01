@@ -89,7 +89,7 @@ if __name__ == '__main__':
     # quantum circuit to generate inputs of MolGAN
     config.quantum = True
     # number of qubit of quantum circuit
-    config.qubits = 2
+    config.qubits = 4
     # number of layer of quantum circuit
     config.layer = 3
     # update the parameters of quantum circuit
@@ -124,17 +124,31 @@ if __name__ == '__main__':
     #config.decay_every_epoch = None
     #config.gamma = 0.1
 
+    # Resume training
+    config.mode = 'train'
+    config.complexity = 'mr'
+    config.batch_size = 128
+    config.z_dim = 4
+    config.num_epochs = 300
+    config.n_critic = 5
+    config.critic_type = 'D'
+    config.lambda_wgan = 1
+    config.decay_every_epoch = None
+    config.resume_epoch = 150
+    config.saving_dir = r"results/quantum-GAN/20220119_140127/train"
+
+
 
     # Testing
     config.mode = "test"
     config.complexity = 'mr'
     config.test_sample_size = 5000
-    config.z_dim = 2
-    config.test_epoch = 300
+    config.z_dim = 4
+    config.test_epoch = 120
     # MolGAN
     #config.saving_dir = r"results/GAN/20220111_113504/train"
     # Quantum
-    config.saving_dir = r"results/quantum-GAN/20220111_153728/train"
+    config.saving_dir = r"results/quantum-GAN/20220119_140127/train"
 
 
     if config.complexity == 'nr':
