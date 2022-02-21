@@ -76,7 +76,7 @@ if __name__ == '__main__':
     config = get_GAN_config()
 
     # GPU
-    os.environ["CUDA_VISIBLE_DEVICES"]="0"
+    os.environ["CUDA_VISIBLE_DEVICES"]="6"
 
 
     # Dataset
@@ -89,9 +89,9 @@ if __name__ == '__main__':
     # quantum circuit to generate inputs of MolGAN
     config.quantum = True
     # number of qubit of quantum circuit
-    config.qubits = 8
+    config.qubits = 4
     # number of layer of quantum circuit
-    config.layer = 5
+    config.layer = 3
     # update the parameters of quantum circuit
     config.update_qc = True
     # the learning rate of quantum circuit
@@ -128,12 +128,12 @@ if __name__ == '__main__':
     config.mode = "test"
     config.complexity = 'mr'
     config.test_sample_size = 5000
-    config.z_dim = 8
-    config.test_epoch = 120
+    config.z_dim = 4
+    config.test_epoch = 300
     # MolGAN
     #config.saving_dir = r"results/GAN/20220111_113504/train"
     # Quantum
-    config.saving_dir = r"results/quantum-GAN/20220111_153346/train"
+    config.saving_dir = r"results/quantum-GAN/20220201_114439/train"
 
 
     if config.complexity == 'nr':
