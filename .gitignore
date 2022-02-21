@@ -1,6 +1,9 @@
 # Archived files
 archived/*
 
+# smiles .sml
+*.smi
+
 # misc
 misc/*
 
