@@ -4,6 +4,8 @@ archived/*
 # smiles .sml
 *.smi
 
+*.sparsedataset
+
 # misc
 misc/*
 
