@@ -302,5 +302,5 @@ if __name__ == '__main__':
 
     # GDB13 dataset
     data = SparseMolecularDataset()
-    data.generate('gdb13.smi', filters=lambda x: x.GetNumAtoms() <= 13)
-    data.save('gdb13.sparsedataset')
+    data.generate('gdb13.rand1M.smi', filters=lambda x: x.GetNumAtoms() <= 13)
+    data.save('gdb13_rand1M_13nodes.sparsedataset')
