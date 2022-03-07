@@ -11,6 +11,7 @@ misc/*
 
 # Generated_molecules
 generated_molecules/*
+data/generated_molecules/
 
 # csv files
 *.csv
