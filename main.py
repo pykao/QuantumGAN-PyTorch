@@ -81,17 +81,17 @@ if __name__ == '__main__':
 
     # Dataset
     # molecule dataset dir
-    config.mol_data_dir = r'data/gdb9_9nodes.sparsedataset'
+    #config.mol_data_dir = r'data/gdb9_9nodes.sparsedataset'
     #config.mol_data_dir = r'data/qm9_5k.sparsedataset'
-    #config.mol_data_dir = r'data/gdb13_1M_13nodes.sparsedataset'
+    config.mol_data_dir = r'data/gdb13_1M_13nodes.sparsedataset'
 
     # Quantum
     # quantum circuit to generate inputs of MolGAN
-    config.quantum = True
+    config.quantum = False
     # number of qubit of quantum circuit
     config.qubits = 8
     # number of layer of quantum circuit
-    config.layer = 5
+    config.layer = 3
     # update the parameters of quantum circuit
     config.update_qc = True
     # the learning rate of quantum circuit
@@ -105,35 +105,35 @@ if __name__ == '__main__':
 
 
     # Training
-    #config.mode = 'train'
+    config.mode = 'train'
     # the complexity of generator
-    #config.complexity = 'nr'
+    config.complexity = 'mr'
     # batch size
-    #config.batch_size = 128
+    config.batch_size = 128
     # input noise dimension
-    #config.z_dim = 8
+    config.z_dim = 8
     # number of epoch
-    #config.num_epochs = 300
+    config.num_epochs = 300
     # n_critic
-    #config.n_critic = 5
+    config.n_critic = 5
     # critic type
-    #config.critic_type = 'D'
+    config.critic_type = 'D'
     # 1.0 for pure WGAN and 0.0 for pure RL
-    #config.lambda_wgan = 1
+    config.lambda_wgan = 1
     # weight decay
-    #config.decay_every_epoch = None
-    #config.gamma = 0.1
+    config.decay_every_epoch = None
+    config.gamma = 0.1
 
     # Testing
-    config.mode = "test"
-    config.complexity = 'mr'
-    config.test_sample_size = 5000
-    config.z_dim = 8
-    config.test_epoch = 300
+    #config.mode = "test"
+    #config.complexity = 'mr'
+    #config.test_sample_size = 5000
+    #config.z_dim = 8
+    #config.test_epoch = 300
     # MolGAN
     #config.saving_dir = r"results/GAN/20220111_113504/train"
     # Quantum
-    config.saving_dir = r"results/quantum-GAN/20220111_153346/train"
+    #config.saving_dir = r"results/quantum-GAN/20220111_153346/train"
 
 
     if config.complexity == 'nr':
