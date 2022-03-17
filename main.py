@@ -76,7 +76,7 @@ if __name__ == '__main__':
     config = get_GAN_config()
 
     # GPU
-    os.environ["CUDA_VISIBLE_DEVICES"]=""
+    os.environ["CUDA_VISIBLE_DEVICES"]="1"
 
 
     # Dataset
@@ -109,7 +109,7 @@ if __name__ == '__main__':
     # the complexity of generator
     config.complexity = 'mr'
     # batch size
-    config.batch_size = 128
+    config.batch_size = 32
     # input noise dimension
     config.z_dim = 8
     # number of epoch
@@ -119,7 +119,7 @@ if __name__ == '__main__':
     # critic type
     config.critic_type = 'D'
     # 1.0 for pure WGAN and 0.0 for pure RL
-    config.lambda_wgan = 1
+    config.lambda_wgan = 1.0
     # weight decay
     config.decay_every_epoch = None
     config.gamma = 0.1
