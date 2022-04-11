@@ -76,7 +76,7 @@ if __name__ == '__main__':
     config = get_GAN_config()
 
     # GPU
-    os.environ["CUDA_VISIBLE_DEVICES"]="1"
+    os.environ["CUDA_VISIBLE_DEVICES"]="6"
 
 
     # Dataset
@@ -109,7 +109,7 @@ if __name__ == '__main__':
     # the complexity of generator
     config.complexity = 'mr'
     # batch size
-    config.batch_size = 32
+    config.batch_size = 2
     # input noise dimension
     config.z_dim = 8
     # number of epoch
