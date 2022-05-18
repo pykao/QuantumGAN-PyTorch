@@ -76,22 +76,22 @@ if __name__ == '__main__':
     config = get_GAN_config()
 
     # GPU
-    os.environ["CUDA_VISIBLE_DEVICES"]="6"
+    os.environ["CUDA_VISIBLE_DEVICES"]="4"
 
 
     # Dataset
     # molecule dataset dir
-    #config.mol_data_dir = r'data/gdb9_9nodes.sparsedataset'
+    config.mol_data_dir = r'data/gdb9_9nodes.sparsedataset'
     #config.mol_data_dir = r'data/qm9_5k.sparsedataset'
-    config.mol_data_dir = r'data/gdb13_1M_13nodes.sparsedataset'
+    #config.mol_data_dir = r'data/gdb13_1M_13nodes.sparsedataset'
 
     # Quantum
     # quantum circuit to generate inputs of MolGAN
-    config.quantum = False
+    config.quantum = True
     # number of qubit of quantum circuit
-    config.qubits = 8
+    config.qubits = 4
     # number of layer of quantum circuit
-    config.layer = 3
+    config.layer = 5
     # update the parameters of quantum circuit
     config.update_qc = True
     # the learning rate of quantum circuit
@@ -109,11 +109,11 @@ if __name__ == '__main__':
     # the complexity of generator
     config.complexity = 'mr'
     # batch size
-    config.batch_size = 2
+    config.batch_size = 128
     # input noise dimension
-    config.z_dim = 8
+    config.z_dim = 4
     # number of epoch
-    config.num_epochs = 300
+    config.num_epochs = 150
     # n_critic
     config.n_critic = 5
     # critic type
