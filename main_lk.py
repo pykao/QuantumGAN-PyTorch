@@ -10,7 +10,7 @@ from utils.utils_io import get_date_postfix
 lg = RDLogger.logger()
 lg.setLevel(RDLogger.CRITICAL)
 
-from solver import Solver
+from solver_ken import Solver
 from torch.backends import cudnn
 
 import pennylane as qml
