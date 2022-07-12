@@ -590,12 +590,18 @@ class Solver(object):
                     except:
                         continue
 
+                # unique smiles list
+                #smiles_list = list(set(smiles_list))
+                # randomly sampling a list
+                #from random import sample
+                #smiles_list = sample(smiles_list, 520)
                 if len(smiles_list) > 0:
                     sample_num = len(training_set) if len(training_set) < len(smiles_list) else len(smiles_list)
                     generator = MockGenerator(smiles_list)
                     benchmark = KLDivBenchmark(number_samples=sample_num, training_set=training_set)
                     result = benchmark.assess_model(generator)
                     print(result.metadata)
+                    print(result.score)
                     print(len(smiles_list))
                     print('==============')
 
