@@ -76,20 +76,19 @@ if __name__ == '__main__':
     config = get_GAN_config()
 
     # GPU
-    os.environ["CUDA_VISIBLE_DEVICES"]=""
-
+    os.environ["CUDA_VISIBLE_DEVICES"]="2"
 
     # Dataset
     # molecule dataset dir
-    #config.mol_data_dir = r'data/gdb9_9nodes.sparsedataset'
+    config.mol_data_dir = r'data/gdb9_9nodes.sparsedataset'
     #config.mol_data_dir = r'data/qm9_5k.sparsedataset'
-    config.mol_data_dir = r'data/gdb13_1M_13nodes.sparsedataset'
+    #config.mol_data_dir = r'data/gdb13_1M_13nodes.sparsedataset'
 
     # Quantum
     # quantum circuit to generate inputs of MolGAN
-    config.quantum = False
+    config.quantum = True
     # number of qubit of quantum circuit
-    config.qubits = 8
+    config.qubits = 4
     # number of layer of quantum circuit
     config.layer = 3
     # update the parameters of quantum circuit
@@ -98,8 +97,8 @@ if __name__ == '__main__':
     # None: same learning rate as g_lr
     config.qc_lr = 0.04
     # initial state of quantum circuit (can be either uniform or gaussian)
-    config.qc_init_state = 'uniform'
     #config.qc_init_state = 'gaussian'
+    config.qc_init_state = 'uniform'
     # to use pretrained quantum circuit or not
     config.qc_pretrained = False
 
@@ -111,9 +110,9 @@ if __name__ == '__main__':
     # batch size
     config.batch_size = 128
     # input noise dimension
-    config.z_dim = 8
+    config.z_dim = 4
     # number of epoch
-    config.num_epochs = 300
+    config.num_epochs = 150
     # n_critic
     config.n_critic = 5
     # critic type
@@ -121,19 +120,19 @@ if __name__ == '__main__':
     # 1.0 for pure WGAN and 0.0 for pure RL
     config.lambda_wgan = 1
     # weight decay
-    config.decay_every_epoch = None
+    config.decay_every_epoch = 100
     config.gamma = 0.1
 
     # Testing
     #config.mode = "test"
     #config.complexity = 'mr'
-    #config.test_sample_size = 5000
-    #config.z_dim = 8
-    #config.test_epoch = 300
+    #config.test_sample_size = 2048
+    #config.z_dim = 4
+    #config.test_epoch = 5
     # MolGAN
     #config.saving_dir = r"results/GAN/20220111_113504/train"
     # Quantum
-    #config.saving_dir = r"results/quantum-GAN/20220111_153346/train"
+    #config.saving_dir = r"results/quantum-GAN/20220426_031403/train"
 
 
     if config.complexity == 'nr':
@@ -165,17 +164,24 @@ if __name__ == '__main__':
         else:
             z1 = random.uniform(-1, 1)
             z2 = random.uniform(-1, 1)
-        # construct generator circuit for both atom vector and node matrix
+
+        # initialization layer
         for i in range(config.qubits):
             qml.RY(np.arcsin(z1), wires=i)
             qml.RZ(np.arcsin(z2), wires=i)
+
+        # construct generator circuit for both atom vector and node matrix
         for l in range(config.layer):
             for i in range(config.qubits):
-                qml.RY(w[i], wires=i)
+                qml.Rot(w[(l*config.qubits+i)*3],
+                        w[(l*config.qubits+i)*3+1],
+                        w[(l*config.qubits+i)*3+2], wires=i)
             for i in range(config.qubits-1):
-                qml.CNOT(wires=[i, i+1])
-                qml.RZ(w[i+config.qubits], wires=i+1)
-                qml.CNOT(wires=[i, i+1])
+                qml.CZ(wires=[i, i+1])
+            qml.CZ(wires=[i+1, 0])
+        for i in range(config.qubits):
+            qml.RX(w[config.layer*config.qubits*3+i*2], wires=i)
+            qml.RY(w[config.layer*config.qubits*3+i*2 + 1], wires=i)
         return [qml.expval(qml.PauliZ(i)) for i in range(config.qubits)]
 
     config.gen_circuit = gen_circuit

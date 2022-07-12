@@ -21,6 +21,9 @@ from models.models import Generator, Discriminator
 from data.sparse_molecular_dataset import SparseMolecularDataset
 from utils.logger import Logger
 
+from guacamol.distribution_learning_benchmark import ValidityBenchmark, UniquenessBenchmark, NoveltyBenchmark, KLDivBenchmark
+from mock_generator import MockGenerator
+
 class Solver(object):
     """Solver for training and testing MolGAN"""
 
@@ -555,6 +558,19 @@ class Solver(object):
                 if a_step == 0 and (epoch_i+1) % self.decay_every_epoch == 0:
                     self.update_lr(self.gamma)
 
+            ### load training molecule ###
+            sdf = Chem.SDMolSupplier('./data/gdb9.sdf')
+            randomlist = random.sample(range(0, len(sdf)), self.test_sample_size)
+            training_set = []
+            for idx, a_smi in enumerate(sdf):
+                try:
+                    a_mol = Chem.MolToSmiles(a_smi)
+                    if a_mol == None:
+                        continue
+                    if idx in randomlist:
+                        training_set += [a_mol]
+                except:
+                    continue
 
             # Get scores
             if train_val_test == 'val':
@@ -564,6 +580,25 @@ class Solver(object):
                     scores[k].append(v)
                 for k, v in m0.items():
                     scores[k].append(np.array(v)[np.nonzero(v)].mean())
+
+                print('====calculate KLDivergence ====')
+                smiles_list = []
+                for mol in mols:
+                    try:
+                        if Chem.MolToSmiles(mol) is not None:
+                            smiles_list += [Chem.MolToSmiles(mol)]
+                    except:
+                        continue
+
+                if len(smiles_list) > 0:
+                    sample_num = len(training_set) if len(training_set) < len(smiles_list) else len(smiles_list)
+                    generator = MockGenerator(smiles_list)
+                    benchmark = KLDivBenchmark(number_samples=sample_num, training_set=training_set)
+                    result = benchmark.assess_model(generator)
+                    print(result.metadata)
+                    print(len(smiles_list))
+                    print('==============')
+
 
                 # Save checkpoints
                 if self.mode == 'train':

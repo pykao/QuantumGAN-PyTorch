@@ -290,9 +290,9 @@ class SparseMolecularDataset():
 
 if __name__ == '__main__':
     # GDB9 dataset
-    #data = SparseMolecularDataset()
-    #data.generate('gdb9.sdf', filters=lambda x: x.GetNumAtoms() <= 9)
-    #data.save('gdb9_9nodes.sparsedataset')
+    data = SparseMolecularDataset()
+    data.generate('gdb9.sdf', filters=lambda x: x.GetNumAtoms() <= 9)
+    data.save('gdb9_9nodes.sparsedataset')
 
     # QM9 dataset
     #data = SparseMolecularDataset()
@@ -301,6 +301,6 @@ if __name__ == '__main__':
     #data.save('qm9_5k.sparsedataset')
 
     # GDB13 dataset
-    data = SparseMolecularDataset()
-    data.generate('gdb13.rand1M.smi', filters=lambda x: x.GetNumAtoms() <= 13)
-    data.save('gdb13_rand1M_13nodes.sparsedataset')
+    #data = SparseMolecularDataset()
+    #data.generate('gdb13.rand1M.smi', filters=lambda x: x.GetNumAtoms() <= 13)
+    #data.save('gdb13_rand1M_13nodes.sparsedataset')
