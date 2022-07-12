@@ -76,12 +76,7 @@ if __name__ == '__main__':
     config = get_GAN_config()
 
     # GPU
-<<<<<<< HEAD
     os.environ["CUDA_VISIBLE_DEVICES"]="2"
-=======
-    os.environ["CUDA_VISIBLE_DEVICES"]="4"
-
->>>>>>> 5d8efce4cc79429702a9b72e6bf0dca97b181250
 
     # Dataset
     # molecule dataset dir
