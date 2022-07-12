@@ -76,7 +76,12 @@ if __name__ == '__main__':
     config = get_GAN_config()
 
     # GPU
+<<<<<<< HEAD
     os.environ["CUDA_VISIBLE_DEVICES"]="2"
+=======
+    os.environ["CUDA_VISIBLE_DEVICES"]="4"
+
+>>>>>>> 5d8efce4cc79429702a9b72e6bf0dca97b181250
 
     # Dataset
     # molecule dataset dir
@@ -90,7 +95,7 @@ if __name__ == '__main__':
     # number of qubit of quantum circuit
     config.qubits = 4
     # number of layer of quantum circuit
-    config.layer = 3
+    config.layer = 5
     # update the parameters of quantum circuit
     config.update_qc = True
     # the learning rate of quantum circuit
@@ -118,7 +123,7 @@ if __name__ == '__main__':
     # critic type
     config.critic_type = 'D'
     # 1.0 for pure WGAN and 0.0 for pure RL
-    config.lambda_wgan = 1
+    config.lambda_wgan = 1.0
     # weight decay
     config.decay_every_epoch = 100
     config.gamma = 0.1
